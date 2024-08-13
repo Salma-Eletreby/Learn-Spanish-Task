@@ -1,9 +1,8 @@
 import { MongoClient } from "mongodb";
 
 export default async function handler(req, res) {
-  const mongo = "mongodb+srv://salma:7IkyHifsfDt1tisv@maincluster.eh01p.mongodb.net/"
   if (req.method === "GET") {
-    const client = new MongoClient(mongo, {
+    const client = new MongoClient(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
@@ -25,7 +24,7 @@ export default async function handler(req, res) {
   } else if (req.method === "POST") {
     const data = req.body;
 
-    const client = new MongoClient(mongo, {
+    const client = new MongoClient(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
