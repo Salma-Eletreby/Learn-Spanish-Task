@@ -1,42 +1,6 @@
 const state = {
   name: "",
-  playGame: false,
   gameChoice: "",
-};
-
-document.getElementById("no-button").onclick = async function () {
-  var pageHTML = `
-    <div id="top">
-      </div>
-      <div id="middle">
-        <h1 id="title">-End-</h1>
-        <h5 id="subtitle">Thank you for your time</h5>
-      </div>
-      <div id="bottom">
-      </div>
-    `;
-
-  if (document.getElementById("name").value == "") {
-    alert("Please enter your name");
-    document.getElementById("name").style.outline = "10px solid red";
-  } else {
-    var user = {
-      name: document.getElementById("name").value,
-      playGame: false,
-      gameChoice: null,
-    };
-
-    const response = await fetch("/api/data", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
-
-    document.getElementById("main").innerHTML = pageHTML;
-    document.getElementById("bottom").style.paddingBottom = "100rem";
-  }
 };
 
 document.getElementById("yes-button").onclick = async function () {
@@ -165,7 +129,6 @@ document.getElementById("yes-button").onclick = async function () {
 
           var user = {
             name: state.name,
-            playGame: state.playGame,
             gameChoice: state.gameChoice,
           };
 
@@ -280,7 +243,6 @@ function load() {
     <div class="text_4043">4</div>
   </div>
 </div>
-
     `
 
   document.getElementById("main").innerHTML = firstHtml;
@@ -288,5 +250,26 @@ function load() {
   setTimeout(function () {
     document.getElementById("main").innerHTML = secondHTml;
     document.getElementById("main").style.position ="relative"
-  }, 30000);
+    document.getElementById("main").innerHTML +=`
+    <button type="button" class="button1">
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="16"
+  height="16"
+  fill="currentColor"
+  class="bi bi-arrow-repeat"
+  viewBox="0 0 16 16"
+>
+  <path
+    d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"
+  ></path>
+  <path
+    fill-rule="evenodd"
+    d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"
+  ></path>
+</svg>
+Refresh
+</button>
+`
+  }, 30);
 }
