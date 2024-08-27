@@ -86,10 +86,10 @@ document.getElementById("yes-button").onclick = async function () {
         <div class="card" id="Strategy">
           <div class="card-inner">
             <div class="card-front">
-              <p>Strategy</p>
+              <p>Endless Runner</p>
             </div>
             <div class="card-back">
-              <iframe width="560" height="315" src="https://www.youtube.com/embed/_Saz0GxhAqQ?si=7rGn0LrMutsAcTQB&amp;start=24&autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              <iframe width="560" height="315" src="https://www.youtube.com/embed/7ghSziUQnhs?si=j983OOjWCSQSTUdK&amp;start=24&autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
               <button class="button" >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <g stroke-width="0" id="SVGRepo_bgCarrier"></g>
@@ -121,6 +121,16 @@ document.getElementById("yes-button").onclick = async function () {
     document.getElementById("main").innerHTML = pageHTML;
     document.getElementById("bottom").style.paddingBottom = "100rem";
 
+    const mediaQuery = window.matchMedia("(min-width: 1800px)");
+
+    function handleScreenSizeChange(event) {
+      if (event.matches) {
+        document.getElementById("main").style.marginTop="-57rem"
+      }
+    }
+
+    handleScreenSizeChange(mediaQuery);
+
     Array.from(document.getElementsByClassName("button")).forEach((element) => {
       element.addEventListener("click", async () => {
         const outerDiv = element.closest("div[id]");
@@ -132,22 +142,14 @@ document.getElementById("yes-button").onclick = async function () {
             gameChoice: state.gameChoice,
           };
 
-          const response = await fetch("/api/data", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(user),
-          });
-
-          load();
+          load(user);
         }
       });
     });
   }
 };
 
-function load() {
+async function load(user) {
   const firstHtml = `
         <div id="loader">
             <div class="box-of-star4">
@@ -246,12 +248,30 @@ function load() {
     `
 
   document.getElementById("main").innerHTML = firstHtml;
+  const response = await fetch("/api/data", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(user),
+  });
 
   setTimeout(function () {
     document.getElementById("main").innerHTML = secondHTml;
     document.getElementById("main").style.position ="relative"
+    
+    const mediaQuery = window.matchMedia("(min-width: 1800px)");
+
+    function handleScreenSizeChange(event) {
+      if (event.matches) {
+        document.getElementById("main").style.marginTop="0rem"
+      }
+    }
+
+    handleScreenSizeChange(mediaQuery);
+
     document.getElementById("main").innerHTML +=`
-    <button type="button" class="button1">
+    <button type="button" class="button1" onclick="refresh();">
 <svg
   xmlns="http://www.w3.org/2000/svg"
   width="16"
@@ -271,5 +291,143 @@ function load() {
 Refresh
 </button>
 `
-  }, 30);
+  }, 1000);
+}
+
+function refresh(){
+    const firstHtml = `
+          <div id="loader">
+              <div class="box-of-star4">
+                  <div class="star star-position1"></div>
+                  <div class="star star-position2"></div>
+                  <div class="star star-position3"></div>
+                  <div class="star star-position4"></div>
+                  <div class="star star-position5"></div>
+                  <div class="star star-position6"></div>
+                  <div class="star star-position7"></div>
+              </div>
+              <div data-js="astro" class="astronaut">
+                  <div class="head"></div>
+                  <div class="arm arm-left"></div>
+                  <div class="arm arm-right"></div>
+                  <div class="body">
+                      <div class="panel"></div>
+                  </div>
+                  <div class="leg leg-left"></div>
+                  <div class="leg leg-right"></div>
+                  <div class="schoolbag"></div>
+              </div>
+          <div id="loading-text">
+          <p>Loading...</p>
+          </div>
+          </div>
+      `;
+  
+
+      const secondHTml=`
+  <div class="main_wrapper">
+    <div class="main">
+      <div class="antenna">
+        <div class="antenna_shadow"></div>
+        <div class="a1"></div>
+        <div class="a1d"></div>
+        <div class="a2"></div>
+        <div class="a2d"></div>
+        <div class="a_base"></div>
+      </div>
+      <div class="tv">
+        <div class="cruve">
+          <svg
+            xml:space="preserve"
+            viewBox="0 0 189.929 189.929"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns="http://www.w3.org/2000/svg"
+            version="1.1"
+            class="curve_svg"
+          >
+            <path
+              d="M70.343,70.343c-30.554,30.553-44.806,72.7-39.102,115.635l-29.738,3.951C-5.442,137.659,11.917,86.34,49.129,49.13
+          C86.34,11.918,137.664-5.445,189.928,1.502l-3.95,29.738C143.041,25.54,100.895,39.789,70.343,70.343z"
+            ></path>
+          </svg>
+        </div>
+        <div class="display_div">
+          <div class="screen_out">
+            <div class="screen_out1">
+              <div class="screen">
+                <span class="notfound_text"> NOT FOUND</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="lines">
+          <div class="line1"></div>
+          <div class="line2"></div>
+          <div class="line3"></div>
+        </div>
+        <div class="buttons_div">
+          <div class="b1"><div></div></div>
+          <div class="b2"></div>
+          <div class="speakers">
+            <div class="g1">
+              <div class="g11"></div>
+              <div class="g12"></div>
+              <div class="g13"></div>
+            </div>
+            <div class="g"></div>
+            <div class="g"></div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="base1"></div>
+        <div class="base2"></div>
+        <div class="base3"></div>
+      </div>
+    </div>
+    <div class="text_404">
+      <div class="text_4041">4</div>
+      <div class="text_4042">0</div>
+      <div class="text_4043">4</div>
+    </div>
+  </div>
+      `
+  
+    document.getElementById("main").innerHTML = firstHtml;
+    const mediaQuery = window.matchMedia("(min-width: 1800px)");
+
+    function handleScreenSizeChange(event) {
+      if (event.matches) {
+        document.getElementById("loader").style.marginTop="-50rem"
+      }
+    }
+  
+    handleScreenSizeChange(mediaQuery);
+  
+    setTimeout(function () {
+      document.getElementById("main").innerHTML = secondHTml;
+      document.getElementById("main").style.position ="relative"
+      document.getElementById("main").innerHTML +=`
+      <button type="button" class="button1" onclick="refresh();">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    fill="currentColor"
+    class="bi bi-arrow-repeat"
+    viewBox="0 0 16 16"
+  >
+    <path
+      d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"
+    ></path>
+    <path
+      fill-rule="evenodd"
+      d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"
+    ></path>
+  </svg>
+  Refresh
+  </button>
+  `
+
+    }, 3000);
 }
