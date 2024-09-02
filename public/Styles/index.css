@@ -134,13 +134,11 @@ body {
   width: 100%;
   height: 100%;
   position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.999s;
 }
 
-.card:hover .card-inner {
+/* .card:hover .card-inner {
   transform: rotateY(180deg);
-}
+} */
 
 .card-front,
 .card-back {
@@ -151,13 +149,11 @@ body {
 }
 
 .card-front {
-  /* background-color: #80DAFE; */
   background: linear-gradient(-45deg, #e81cff 0%, #40c9ff 100%);
-
   color: #ffff;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  /* border: 10px solid #80DAFE; */
   border-radius: 10px;
   justify-content: center;
   font-size: 24px;
@@ -204,12 +200,9 @@ body {
 }
 
 iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 80%;
-  border: 0; /* Removes default iframe border */
+  width: 90%;
+  height: 50%;
+  border: 0; 
 }
 
 .button {
@@ -1043,23 +1036,30 @@ iframe {
 
   .card {
     width: 50rem;
-    height: 65rem;
+    height: 60rem;
   }
 
   #games {
     gap: 2rem;
     width: 200%;
     margin-left: -58rem;
+    margin-top: -2rem;
   }
 
   .card-front {
-    font-size: 7rem;
+    font-size: 5rem;
+    gap: 3rem;
   }
 
   .card-back .button {
     position: relative;
     top: 25rem;
     font-size: 3rem;
+  }
+
+  iframe{
+    margin-top: -5rem;
+    margin-bottom: 2rem;
   }
 
   #loading-text {
@@ -1074,6 +1074,10 @@ iframe {
   .main_wrapper {
     padding: 50rem;
     padding-top: 15rem;
+    transform: scale(3);
+  }
+
+  .button{
     transform: scale(3);
   }
 
