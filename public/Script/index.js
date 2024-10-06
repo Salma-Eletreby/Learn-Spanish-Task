@@ -111,36 +111,48 @@ document.getElementById("yes-button").onclick = async function () {
     document.getElementById("name").style.outline = "10px solid red";
   } else {
     state.name = document.getElementById("name").value;
-    state.playGame = true;
 
-    document.getElementById("main").innerHTML = pageHTML;
-    document.getElementById("bottom").style.paddingBottom = "100rem";
+    let userData = JSON.parse(localStorage.getItem("userDataFrustation")) || [];
+    var isExist = userData.findIndex((d) => d.id == state.name);
+    if (isExist !== -1) {
+      state.gameChoice = userData[isExist].state.gameChoice;
 
-    const mediaQuery = window.matchMedia("(min-width: 1800px)");
+      var user = {
+        name: userData[isExist].state.name,
+        gameChoice: userData[isExist].state.gameChoice,
+      };
 
-    function handleScreenSizeChange(event) {
-      if (event.matches) {
-        document.getElementById("main").style.marginTop="-53rem"
-      }
-    }
+      load(user)
+    } else {
+      document.getElementById("main").innerHTML = pageHTML;
+      document.getElementById("bottom").style.paddingBottom = "100rem";
 
-    handleScreenSizeChange(mediaQuery);
+      const mediaQuery = window.matchMedia("(min-width: 1800px)");
 
-    Array.from(document.getElementsByClassName("button")).forEach((element) => {
-      element.addEventListener("click", async () => {
-        const outerDiv = element.closest("div[id]");
-        if (outerDiv) {
-          state.gameChoice = outerDiv.id;
-
-          var user = {
-            name: state.name,
-            gameChoice: state.gameChoice,
-          };
-
-          load(user);
+      function handleScreenSizeChange(event) {
+        if (event.matches) {
+          document.getElementById("main").style.marginTop = "-53rem";
         }
+      }
+
+      handleScreenSizeChange(mediaQuery);
+
+      Array.from(document.getElementsByClassName("button")).forEach((element) => {
+        element.addEventListener("click", async () => {
+          const outerDiv = element.closest("div[id]");
+          if (outerDiv) {
+            state.gameChoice = outerDiv.id;
+
+            var user = {
+              name: state.name,
+              gameChoice: state.gameChoice,
+            };
+
+            load(user);
+          }
+        });
       });
-    });
+    }
   }
 };
 
@@ -173,7 +185,7 @@ async function load(user) {
         </div>
     `;
 
-    const secondHTml=`
+  const secondHTml = `
 <div class="main_wrapper">
   <div class="main">
     <div class="antenna">
@@ -240,32 +252,41 @@ async function load(user) {
     <div class="text_4043">4</div>
   </div>
 </div>
-    `
+    `;
 
   document.getElementById("main").innerHTML = firstHtml;
-  const response = await fetch("/api/data", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(user),
-  });
+  savetoLocalStorage();
+
+  const response = await fetch("/api/data");
+  const doesExist = await response.json();  
+
+  if(doesExist.findIndex((d) => d.name == state.name) !== -1){
+
+  }else{
+    const response = await fetch("/api/data", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
+  }
 
   setTimeout(function () {
     document.getElementById("main").innerHTML = secondHTml;
-    document.getElementById("main").style.position ="relative"
-    
+    document.getElementById("main").style.position = "relative";
+
     const mediaQuery = window.matchMedia("(min-width: 1800px)");
 
     function handleScreenSizeChange(event) {
       if (event.matches) {
-        document.getElementById("main").style.marginTop="0rem"
+        document.getElementById("main").style.marginTop = "0rem";
       }
     }
 
     handleScreenSizeChange(mediaQuery);
 
-    document.getElementById("main").innerHTML +=`
+    document.getElementById("main").innerHTML += `
     <button type="button" class="button1" onclick="refresh();">
 <svg
   xmlns="http://www.w3.org/2000/svg"
@@ -285,12 +306,12 @@ async function load(user) {
 </svg>
 Refresh
 </button>
-`
+`;
   }, 1000);
 }
 
-function refresh(){
-    const firstHtml = `
+function refresh() {
+  const firstHtml = `
           <div id="loader">
               <div class="box-of-star4">
                   <div class="star star-position1"></div>
@@ -317,9 +338,8 @@ function refresh(){
           </div>
           </div>
       `;
-  
 
-      const secondHTml=`
+  const secondHTml = `
   <div class="main_wrapper">
     <div class="main">
       <div class="antenna">
@@ -386,23 +406,23 @@ function refresh(){
       <div class="text_4043">4</div>
     </div>
   </div>
-      `
-  
-    document.getElementById("main").innerHTML = firstHtml;
-    const mediaQuery = window.matchMedia("(min-width: 1800px)");
+      `;
 
-    function handleScreenSizeChange(event) {
-      if (event.matches) {
-        document.getElementById("loader").style.marginTop="-50rem"
-      }
+  document.getElementById("main").innerHTML = firstHtml;
+  const mediaQuery = window.matchMedia("(min-width: 1800px)");
+
+  function handleScreenSizeChange(event) {
+    if (event.matches) {
+      document.getElementById("loader").style.marginTop = "-50rem";
     }
-  
-    handleScreenSizeChange(mediaQuery);
-  
-    setTimeout(function () {
-      document.getElementById("main").innerHTML = secondHTml;
-      document.getElementById("main").style.position ="relative"
-      document.getElementById("main").innerHTML +=`
+  }
+
+  handleScreenSizeChange(mediaQuery);
+
+  setTimeout(function () {
+    document.getElementById("main").innerHTML = secondHTml;
+    document.getElementById("main").style.position = "relative";
+    document.getElementById("main").innerHTML += `
       <button type="button" class="button1" onclick="refresh();">
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -422,7 +442,42 @@ function refresh(){
   </svg>
   Refresh
   </button>
-  `
-
-    }, 3000);
+  `;
+  }, 3000);
 }
+
+window.savetoLocalStorage = function () {
+  if (state.name != "") {
+    let data = JSON.parse(localStorage.getItem("userDataFrustation")) || [];
+
+    var isExist = data.findIndex((d) => d.id == state.name);
+
+    if (isExist !== -1) {
+      data[isExist] = {
+        id: state.name,
+        state: state,
+      };
+    } else {
+      data.push({
+        id: state.name,
+        state: state,
+      });
+    }
+
+    localStorage.setItem("userDataFrustation", JSON.stringify(data));
+  }
+};
+
+window.removeFromLocalStorage = function () {
+  if (state.name != "") {
+    let data = JSON.parse(localStorage.getItem("userDataFrustation")) || [];
+
+    var isExist = data.findIndex((d) => d.id == state.name);
+
+    if (isExist !== -1) {
+      data.splice(isExist, 1); // Corrected: Use splice to remove the element
+    }
+
+    localStorage.setItem("userDataFrustation", JSON.stringify(data));
+  }
+};
